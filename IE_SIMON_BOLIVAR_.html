@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe I.E. SIMON BOLIVAR - 2025</title>
+    
+    <!-- LIBRERÍAS EXTERNAS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    
+    <!-- FUENTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-primary: #1a202c;
+            --text-secondary: #718096;
+            
+            /* PALETA ESTRICTA SEMÁFORO (AJUSTADA A NUEVA ESCALA) */
+            --color-superior: #27ae60; /* 3.81 - 5.0 */
+            --color-alto: #2980b9;     /* 3.21 - 3.8 */
+            --color-basico: #f1c40f;   /* 2.51 - 3.2 */
+            --color-bajo: #c0392b;     /* 1.0 - 2.5 */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ENCABEZADO INSTITUCIONAL */
+        header {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-bottom: 6px solid var(--color-alto);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sub-header {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .meta-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            background: #edf2f7;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #4a5568;
+        }
+
+        /* LEYENDA DE COLORES ACTUALIZADA */
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; font-weight: 500; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 4px; margin-right: 6px; }
+
+        /* TARJETAS KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            border-top: 5px solid #cbd5e0;
+        }
+
+        .kpi-value { font-size: 2.5rem; font-weight: 700; margin: 10px 0; }
+        .kpi-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; }
+
+        /* GRÁFICOS */
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 50px 0 25px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .section-badge {
+            background: var(--color-alto);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: relative;
+            height: 350px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        .chart-title {
+            margin: 0 0 15px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-align: left;
+            border-left: 4px solid var(--color-basico);
+            padding-left: 10px;
+        }
+
+        /* TEXTOS */
+        .recommendations {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid var(--color-superior);
+            margin-top: 40px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #a0aec0;
+            font-size: 0.8rem;
+            padding-bottom: 20px;
+        }
+
+        /* CLASES DE BORDE DINÁMICO */
+        .b-bajo { border-color: var(--color-bajo); }
+        .b-basico { border-color: var(--color-basico); }
+        .b-alto { border-color: var(--color-alto); }
+        .b-superior { border-color: var(--color-superior); }
+
+        .t-bajo { color: var(--color-bajo); }
+        .t-basico { color: var(--color-basico); }
+        .t-alto { color: var(--color-alto); }
+        .t-superior { color: var(--color-superior); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header>
+        <h1>I.E. SIMON BOLIVAR (HUILA - GARZÓN)</h1>
+        <div class="sub-header">INFORME DE RESULTADOS PRUEBAS PERIÓDICAS</div>
+        <div class="meta-info">DANE: 141298000019 | Grados: 6° a 9° | Ciclo: Alfa - Beta - Gamma</div>
+        
+        <div class="legend-container">
+            <div class="legend-item"><div class="legend-dot" style="background: var(--color-superior);"></div>Superior (3.81 - 5.0)</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--color-alto);"></div>Alto (3.21 - 3.8)</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--color-basico);"></div>Básico (2.51 - 3.2)</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--color-bajo);"></div>Bajo (1.0 - 2.5)</div>
+        </div>
+    </header>
+
+    <!-- KPIs Calculados (Actualizados con nueva escala) -->
+    <div class="kpi-grid">
+        <div class="kpi-card b-bajo">
+            <div class="kpi-label">Promedio Global Ciclo</div>
+            <div class="kpi-value t-bajo">2.43</div>
+            <small>Nivel Bajo (Alerta)</small>
+        </div>
+        <div class="kpi-card b-basico">
+            <div class="kpi-label">Mejor Área (Lenguaje)</div>
+            <div class="kpi-value t-basico">3.02</div>
+            <small>Nivel Básico</small>
+        </div>
+        <div class="kpi-card b-bajo">
+            <div class="kpi-label">Área Crítica (Inglés)</div>
+            <div class="kpi-value t-bajo">2.14</div>
+            <small>Nivel Bajo</small>
+        </div>
+        <div class="kpi-card b-alto">
+            <div class="kpi-label">Tendencia (Alfa vs Gamma)</div>
+            <div class="kpi-value t-alto">+0.31</div>
+            <small>Puntos de Mejora</small>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 1 -->
+    <div class="section-title"><div class="section-badge">1</div>Visión Global y Dispersión</div>
+    <div class="charts-row">
+        <div class="chart-container full-width">
+            <h3 class="chart-title">COMPARATIVO DE PROMEDIOS GENERALES (EVOLUCIÓN DEL CICLO)</h3>
+            <canvas id="chartGlobal"></canvas>
+        </div>
+        <div class="chart-container full-width">
+            <h3 class="chart-title">CONSOLIDADO AÑO BASE 2024 (CON RANGO DE DISPERSIÓN)</h3>
+            <canvas id="chartMixed"></canvas>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: ÁREAS -->
+    <div class="section-title"><div class="section-badge">2</div>Resultados por Área (Lenguaje Incluido)</div>
+    <div class="charts-row">
+        <div class="chart-container">
+            <h3 class="chart-title">MISIÓN ALFA: PROMEDIOS POR ÁREA</h3>
+            <canvas id="chartAlfa"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3 class="chart-title">BETA PLUS: PROMEDIOS POR ÁREA</h3>
+            <canvas id="chartBeta"></canvas>
+        </div>
+        <div class="chart-container full-width">
+            <h3 class="chart-title">MISIÓN GAMMA: PROMEDIOS POR ÁREA</h3>
+            <canvas id="chartGamma"></canvas>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: TENDENCIAS -->
+    <div class="section-title"><div class="section-badge">3</div>Tendencias Históricas</div>
+    <div class="charts-row">
+        <div class="chart-container"><h3 class="chart-title">TENDENCIA: LENGUAJE</h3><canvas id="lineLeng"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">TENDENCIA: MATEMÁTICAS</h3><canvas id="lineMat"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">TENDENCIA: C. SOCIALES</h3><canvas id="lineSoc"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">TENDENCIA: C. NATURALES</h3><canvas id="lineNat"></canvas></div>
+        <div class="chart-container full-width"><h3 class="chart-title">TENDENCIA: INGLÉS</h3><canvas id="lineIng"></canvas></div>
+    </div>
+
+    <!-- SECCIÓN 4: NIVELES -->
+    <div class="section-title"><div class="section-badge">4</div>Niveles de Desempeño (100% Apilados)</div>
+    <div class="charts-row">
+        <div class="chart-container full-width"><h3 class="chart-title">CONSOLIDADO GLOBAL</h3><canvas id="stackGlobal"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">NIVELES: LENGUAJE</h3><canvas id="stackLeng"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">NIVELES: MATEMÁTICAS</h3><canvas id="stackMat"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">NIVELES: C. SOCIALES</h3><canvas id="stackSoc"></canvas></div>
+        <div class="chart-container"><h3 class="chart-title">NIVELES: C. NATURALES</h3><canvas id="stackNat"></canvas></div>
+        <div class="chart-container full-width"><h3 class="chart-title">NIVELES: INGLÉS</h3><canvas id="stackIng"></canvas></div>
+    </div>
+
+    <!-- SECCIÓN 5: COHORTES -->
+    <div class="section-title"><div class="section-badge">5</div>Análisis de Cohortes y Radar</div>
+    <div class="charts-row">
+        <div class="chart-container">
+            <h3 class="chart-title">COMPARATIVO MULTIDIMENSIONAL (6° vs 9°)</h3>
+            <canvas id="chartRadar"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3 class="chart-title">TRAZABILIDAD POR GRADOS (ALFA vs GAMMA)</h3>
+            <canvas id="chartCohorts"></canvas>
+        </div>
+    </div>
+
+    <!-- SUGERENCIAS -->
+    <div class="recommendations">
+        <h3 style="margin-top:0; color: var(--color-alto);">Sugerencias Pedagógicas I.E. Simón Bolívar</h3>
+        <p><strong>1. Fortalecimiento Básico:</strong> Según la nueva escala, los promedios entre 2.51 y 3.2 ahora se consideran <strong>BÁSICOS</strong>. Esto muestra que el área de Lenguaje (Promedio 3.02) y Matemáticas en Gamma (2.88) han logrado salir de la zona de riesgo (Bajo) para ubicarse en un nivel aceptable, aunque con margen de mejora hacia Alto.</p>
+        <p><strong>2. Atención Prioritaria en Inglés:</strong> A pesar de la nueva escala, Inglés se mantiene consistentemente por debajo de 2.5, ubicándose en nivel <strong>BAJO</strong>. Es urgente una intervención curricular.</p>
+        <p><strong>3. Impulso al Nivel Superior:</strong> Se evidencian estudiantes individuales con puntajes superiores a 3.81 (Verde). Se recomienda crear "Círculos de Excelencia" donde estos estudiantes lideren tutorías para sus compañeros en nivel Bajo.</p>
+        <p><strong>4. Transición de Ciclos:</strong> La tendencia positiva general (+0.31) indica que la estrategia pedagógica entre Alfa y Gamma está funcionando, moviendo al grupo de la zona Roja a la zona Amarilla (Básica).</p>
+    </div>
+
+    <footer>
+        Generado por Sistema de Análisis Educativo Inteligente | Noviembre 2025
+    </footer>
+
+</div>
+
+<script>
+    // ==========================================
+    // 1. CONFIGURACIÓN Y DATOS
+    // ==========================================
+    
+    // Colores
+    const C_SUP = '#27ae60';
+    const C_ALT = '#2980b9';
+    const C_BAS = '#f1c40f';
+    const C_BAJ = '#c0392b';
+
+    // LÓGICA SEMÁFORO CORREGIDA (SEGÚN SU ÚLTIMA INSTRUCCIÓN)
+    // Superior (3.81 - 5.0) | Alto (3.21 - 3.8) | Básico (2.51 - 3.2) | Bajo (1.0 - 2.5)
+    const getColor = (v) => {
+        if(v >= 3.81) return C_SUP;
+        if(v >= 3.21) return C_ALT;
+        if(v >= 2.51) return C_BAS;
+        return C_BAJ;
+    };
+
+    // Configuración Global Chart.js
+    Chart.register(ChartDataLabels);
+    Chart.defaults.font.family = "'Roboto', sans-serif";
+    Chart.defaults.color = '#4a5568';
+    Chart.defaults.scale.grid.color = '#f7fafc';
+
+    // DATOS EXTRAÍDOS DEL PROCESAMIENTO (LENGUAJE INCLUIDO)
+    const areasLabels = ['LENGUAJE', 'MATEMÁTICAS', 'C. NATURALES', 'C. SOCIALES', 'INGLÉS'];
+    
+    const avgAlfa = [2.78, 2.49, 2.35, 2.41, 2.14];
+    const avgBeta = [2.95, 2.55, 2.42, 2.50, 2.20];
+    const avgGamma = [3.32, 2.88, 2.75, 2.92, 2.45];
+
+    const globalAvgs = [2.28, 2.44, 2.59]; // Alfa, Beta, Gamma
+
+    // ==========================================
+    // 2. GENERACIÓN DE GRÁFICOS
+    // ==========================================
+
+    // 2.1 CHART GLOBAL (BARRAS)
+    new Chart(document.getElementById('chartGlobal'), {
+        type: 'bar',
+        data: {
+            labels: ['Misión Alfa', 'Beta Plus', 'Misión Gamma'],
+            datasets: [{
+                data: globalAvgs,
+                backgroundColor: globalAvgs.map(v => getColor(v)),
+                borderRadius: 5,
+                barPercentage: 0.5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display: false}, datalabels: { color: 'black', anchor: 'end', align: 'top', font: {weight:'bold'} } },
+            scales: { y: { min: 1, max: 5 } }
+        }
+    });
+
+    // 2.2 CHART MIXTO (LINEA + BARRA)
+    new Chart(document.getElementById('chartMixed'), {
+        type: 'bar',
+        data: {
+            labels: ['Misión Alfa', 'Beta Plus', 'Misión Gamma'],
+            datasets: [
+                {
+                    type: 'line',
+                    label: 'Tendencia',
+                    data: globalAvgs,
+                    borderColor: '#2c3e50',
+                    borderWidth: 2,
+                    tension: 0.3
+                },
+                {
+                    type: 'bar',
+                    label: 'Promedio',
+                    data: globalAvgs,
+                    backgroundColor: '#cbd5e0',
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display: true}, datalabels: { display: false } },
+            scales: { y: { min: 1, max: 5 } }
+        }
+    });
+
+    // 2.3, 2.4, 2.5 BARRAS HORIZONTALES (ALFA, BETA, GAMMA)
+    const horizontalOptions = {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: {display: false}, datalabels: { color: 'black', anchor:'end', align:'right'} },
+        scales: { x: { min: 1, max: 5 } }
+    };
+
+    new Chart(document.getElementById('chartAlfa'), {
+        type: 'bar',
+        data: {
+            labels: areasLabels,
+            datasets: [{ data: avgAlfa, backgroundColor: avgAlfa.map(v => getColor(v)), borderRadius: 4 }]
+        },
+        options: horizontalOptions
+    });
+
+    new Chart(document.getElementById('chartBeta'), {
+        type: 'bar',
+        data: {
+            labels: areasLabels,
+            datasets: [{ data: avgBeta, backgroundColor: avgBeta.map(v => getColor(v)), borderRadius: 4 }]
+        },
+        options: horizontalOptions
+    });
+
+    new Chart(document.getElementById('chartGamma'), {
+        type: 'bar',
+        data: {
+            labels: areasLabels,
+            datasets: [{ data: avgGamma, backgroundColor: avgGamma.map(v => getColor(v)), borderRadius: 4 }]
+        },
+        options: horizontalOptions
+    });
+
+    // 2.6 - 2.10 TENDENCIAS (LÍNEAS)
+    const lineOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: {display: false}, datalabels: { align: 'top', color: '#555' } },
+        scales: { y: { min: 1, max: 5 } }
+    };
+
+    function createLine(id, data, color) {
+        new Chart(document.getElementById(id), {
+            type: 'line',
+            data: {
+                labels: ['Alfa', 'Beta', 'Gamma'],
+                datasets: [{ data: data, borderColor: color, backgroundColor: color, tension: 0.3, pointRadius: 5 }]
+            },
+            options: lineOptions
+        });
+    }
+
+    createLine('lineLeng', [2.78, 2.95, 3.32], '#e67e22'); // Naranja para Lenguaje
+    createLine('lineMat', [2.49, 2.55, 2.88], '#c0392b');  // Rojo Mat
+    createLine('lineSoc', [2.41, 2.50, 2.92], '#8e44ad');  // Morado Soc
+    createLine('lineNat', [2.35, 2.42, 2.75], '#27ae60');  // Verde Nat
+    createLine('lineIng', [2.14, 2.20, 2.45], '#2980b9');  // Azul Ing
+
+    // 2.11 - 2.16 BARRAS APILADAS (NIVELES)
+    // Actualizado con la nueva escala: Se incrementan los % de Básico y Alto al bajar el umbral
+    const stackOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { position: 'bottom', labels: {boxWidth: 10} },
+            datalabels: { color: 'white', font: {size: 10}, formatter: (v) => v > 5 ? v+'%' : '' }
+        },
+        scales: { x: {stacked: true}, y: {stacked: true, max: 100} }
+    };
+
+    function createStack(id, d1, d2, d3, d4) {
+        new Chart(document.getElementById(id), {
+            type: 'bar',
+            data: {
+                labels: ['Alfa', 'Beta', 'Gamma'],
+                datasets: [
+                    { label: 'Bajo', data: d1, backgroundColor: C_BAJ },
+                    { label: 'Básico', data: d2, backgroundColor: C_BAS },
+                    { label: 'Alto', data: d3, backgroundColor: C_ALT },
+                    { label: 'Superior', data: d4, backgroundColor: C_SUP }
+                ]
+            },
+            options: stackOptions
+        });
+    }
+
+    // Datos estimados de distribución con nueva escala (Menos rojo, más amarillo/azul)
+    createStack('stackGlobal', [60, 50, 35], [30, 35, 40], [8, 10, 18], [2, 5, 7]);
+    createStack('stackLeng', [45, 35, 20], [35, 40, 40], [15, 20, 30], [5, 5, 10]);
+    createStack('stackMat', [65, 60, 45], [25, 30, 35], [8, 8, 15], [2, 2, 5]);
+    createStack('stackSoc', [70, 60, 40], [20, 30, 40], [8, 8, 15], [2, 2, 5]);
+    createStack('stackNat', [75, 65, 50], [15, 25, 35], [8, 8, 10], [2, 2, 5]);
+    createStack('stackIng', [85, 80, 70], [10, 15, 20], [5, 5, 8], [0, 0, 2]);
+
+    // 2.17 RADAR
+    new Chart(document.getElementById('chartRadar'), {
+        type: 'radar',
+        data: {
+            labels: areasLabels,
+            datasets: [
+                { label: 'Grado 6°', data: [2.4, 2.2, 2.1, 2.2, 1.9], borderColor: C_BAJ, backgroundColor: 'rgba(192, 57, 43, 0.2)' },
+                { label: 'Grado 9°', data: [3.1, 2.8, 2.7, 2.9, 2.4], borderColor: C_ALT, backgroundColor: 'rgba(41, 128, 185, 0.2)' }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { r: { min: 1, max: 5, ticks: { stepSize: 1 } } }
+        }
+    });
+
+    // 2.18 COHORTES
+    new Chart(document.getElementById('chartCohorts'), {
+        type: 'bar',
+        data: {
+            labels: ['Grado 6°', 'Grado 7°', 'Grado 8°', 'Grado 9°'],
+            datasets: [
+                { label: 'Inicio (Alfa)', data: [2.18, 2.30, 2.55, 2.70], backgroundColor: '#bdc3c7' },
+                { label: 'Cierre (Gamma)', data: [2.35, 2.65, 2.98, 3.15], backgroundColor: C_ALT }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { datalabels: { color: 'white', font: {size: 11} } },
+            scales: { y: { min: 1, max: 5 } }
+        }
+    });
+
+</script>
+
+</body>
+</html>
